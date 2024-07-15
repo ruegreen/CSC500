@@ -22,44 +22,44 @@ class ShoppingCart(object):
         self.customer_name = customer_name
         self.current_date=current_date
         self.cart_items = []
+        self.total_cost = 0
 
     def add_item(self,ItemToPurchase):
         self.cart_items.append(ItemToPurchase)
+        self.total_cost += ItemToPurchase.item_quantity*ItemToPurchase.item_price
 
     def remove_item():
+        #Remember to adjust the cost of the cart!!
         pass
 
     def modify_item():
+        #Remember to adjust the price of the cart, remove old cost, add new cost 
         pass
 
-    def get_num_items_in_cart():
-        pass
+    def get_num_items_in_cart(self):
+        return(len(self.cart_items))
 
-    def get_cost_of_cart():
-        pass
+    def get_cost_of_cart(self):
+        return(self.total_cost)
 
     def print_total(self):
-        if(len(self.cart_items) == 0):
+        if(self.get_num_items_in_cart() == 0):
             print("Shopping Cart is EMPTY!")
             pass
         print(f"{self.customer_name}'s Shopping Cart - {self.current_date}")
         print(f"Number of Items: {len(self.cart_items)}")
-        total_cost = 0
         for item in self.cart_items:
             #Call the class function print_cost_item() which outputs the current item's attributes
             item.print_cost_item()
-            #store the total_cost by adding the current item price to the total_cost
-            total_cost += item.item_quantity*item.item_price
-        print(f"Total: ${total_cost}")
+        print(f"Total: ${self.get_cost_of_cart()}")
 
     def print_description(self):
-        if(len(self.cart_items) == 0):
+        if(self.get_num_items_in_cart() == 0):
             print("Shopping Cart is EMPTY!")
             pass
         print(f"{self.customer_name}'s Shopping Cart - {self.current_date}")
         print(f"Number of Items: {len(self.cart_items)}")
         print(f"Item Descriptions")
-        total_cost = 0
         for item in self.cart_items:
             #Call the class function print_decription_item() which outputs the current item's attributes
             item.print_description_item()
@@ -108,7 +108,7 @@ def main():
         if option == "a":
             print('Handle option \'Add\'')
             item_name = input("Enter the name for item: ")
-            item_description = input(f"Enter a description for {item_name} ")
+            item_description = input(f"Enter a description for {item_name}: ")
             item_price = input(f"Enter the price for {item_name}: $")
             item_quantity = input(f"Enter the quantity of {item_name}: ")
             print("\n")
@@ -128,7 +128,6 @@ def main():
             exit()
         else:
             print('Invalid choice! Please select from the following choices:')
-
 
 if __name__ == "__main__":
     main()
