@@ -4,7 +4,7 @@ class ItemToPurchase(object):
     #set the default values in the constructor if they are not passed when creating an instance of the class
     def __init__(self,name="none",description="none",price=0,qty=0):
         self.item_name = name
-        self.description = description
+        self.item_description = description
         self.item_price = price
         self.item_quantity = qty
 
@@ -14,7 +14,7 @@ class ItemToPurchase(object):
 
     #Function prints out the current objects item name and description only
     def print_description_item(self):
-        print(f"{self.item_name}, Description: {self.description}")
+        print(f"{self.item_name}, Description: {self.item_description}")
 
 class ShoppingCart(object):
      #set the default values in the constructor if they are not passed when creating an instance of the class
@@ -36,11 +36,28 @@ class ShoppingCart(object):
                 self.total_cost -= item.item_quantity*item.item_price
                 self.cart_items.remove(item)
                 removed=True
-        return(removed)
+        if(removed):
+             print(f"Removed item with name: {item_name} from your cart!")
+        else:
+            print(f"Item with name: {item_name} was not found in your shopping cart, nothing removed!")
 
-    def modify_item():
-        #Remember to adjust the price of the cart, remove old cost, add new cost 
-        pass
+    def modify_item(self, ItemToPurchase):
+        modified = False
+        for item in self.cart_items:
+            if ItemToPurchase.item_name in item.item_name:
+                if ((item.item_description != "none") or (item.item_price != 0) or (item.item_quantity != 0)):
+                    #Remove the old cost out of the total
+                    self.total_cost -= item.item_quantity*item.item_price
+                    item.item_description = ItemToPurchase.item_description
+                    item.item_price = ItemToPurchase.item_price
+                    item.item_quantity = ItemToPurchase.item_quantity
+                    #Update the total cost with the new cost
+                    self.total_cost += item.item_quantity*item.item_price
+                    modified = True
+        if(modified):
+             print(f"Updated item with name: {ItemToPurchase.item_name} in your cart!")
+        else:
+            print(f"Item with name: {ItemToPurchase.item_name} was not found in your shopping cart, nothing was modified")
 
     def get_num_items_in_cart(self):
         return(len(self.cart_items))
@@ -112,23 +129,22 @@ def main():
         print_menu()
         option = input('Enter your choice: ')
         if option == "a":
-            print('Handle option \'Add\'')
             item_name = input("Enter the name for item: ")
             item_description = input(f"Enter a description for {item_name}: ")
             item_price = input(f"Enter the price for {item_name}: $")
             item_quantity = input(f"Enter the quantity of {item_name}: ")
             print("\n")
-            #create an instance of ItemToPurchase
-            #ItemToPurchase class constructor
             shopping_cart.add_item(ItemToPurchase(item_name,item_description,int(item_price),int(item_quantity)))
         elif option == "r":
             item_name = input("What is the name of the item you would like to remove? ")
-            if(shopping_cart.remove_item(item_name)) == True:
-                print(f"Removed item with name: {item_name} from your cart!")
-            else:
-                print(f"Item with name: {item_name} was not found in your shopping cart!")
+            shopping_cart.remove_item(item_name)
         elif option == "c":
-            print('Handle option \'Change\'')
+            item_name = input("Enter the name for item you would like to update: ")
+            item_description = input(f"Enter a new description for {item_name}: ")
+            item_price = input(f"Enter a new price for {item_name}: $")
+            item_quantity = input(f"Enter a new quantity for {item_name}: ")
+            print("\n")
+            shopping_cart.modify_item(ItemToPurchase(item_name,item_description,int(item_price),int(item_quantity)))
         elif option == "i":
             shopping_cart.print_description()
         elif option == "o":
