@@ -28,9 +28,15 @@ class ShoppingCart(object):
         self.cart_items.append(ItemToPurchase)
         self.total_cost += ItemToPurchase.item_quantity*ItemToPurchase.item_price
 
-    def remove_item():
-        #Remember to adjust the cost of the cart!!
-        pass
+    def remove_item(self,item_name):
+        removed = False
+        for item in self.cart_items:
+            if item_name in item.item_name:
+                #Remember to adjust the cost of the cart!!
+                self.total_cost -= item.item_quantity*item.item_price
+                self.cart_items.remove(item)
+                removed=True
+        return(removed)
 
     def modify_item():
         #Remember to adjust the price of the cart, remove old cost, add new cost 
@@ -45,24 +51,24 @@ class ShoppingCart(object):
     def print_total(self):
         if(self.get_num_items_in_cart() == 0):
             print("Shopping Cart is EMPTY!")
-            pass
-        print(f"{self.customer_name}'s Shopping Cart - {self.current_date}")
-        print(f"Number of Items: {len(self.cart_items)}")
-        for item in self.cart_items:
-            #Call the class function print_cost_item() which outputs the current item's attributes
-            item.print_cost_item()
-        print(f"Total: ${self.get_cost_of_cart()}")
+        else:
+            print(f"{self.customer_name}'s Shopping Cart - {self.current_date}")
+            print(f"Number of Items: {len(self.cart_items)}")
+            for item in self.cart_items:
+                #Call the class function print_cost_item() which outputs the current item's attributes
+                item.print_cost_item()
+            print(f"Total: ${self.get_cost_of_cart()}")
 
     def print_description(self):
         if(self.get_num_items_in_cart() == 0):
             print("Shopping Cart is EMPTY!")
-            pass
-        print(f"{self.customer_name}'s Shopping Cart - {self.current_date}")
-        print(f"Number of Items: {len(self.cart_items)}")
-        print(f"Item Descriptions")
-        for item in self.cart_items:
-            #Call the class function print_decription_item() which outputs the current item's attributes
-            item.print_description_item()
+        else:
+            print(f"{self.customer_name}'s Shopping Cart - {self.current_date}")
+            print(f"Number of Items: {len(self.cart_items)}")
+            print(f"Item Descriptions")
+            for item in self.cart_items:
+                #Call the class function print_decription_item() which outputs the current item's attributes
+                item.print_description_item()
             
 #Main function
 def main():
@@ -116,7 +122,11 @@ def main():
             #ItemToPurchase class constructor
             shopping_cart.add_item(ItemToPurchase(item_name,item_description,int(item_price),int(item_quantity)))
         elif option == "r":
-            print('Handle option \'Remove\'')
+            item_name = input("What is the name of the item you would like to remove? ")
+            if(shopping_cart.remove_item(item_name)) == True:
+                print(f"Removed item with name: {item_name} from your cart!")
+            else:
+                print(f"Item with name: {item_name} was not found in your shopping cart!")
         elif option == "c":
             print('Handle option \'Change\'')
         elif option == "i":
